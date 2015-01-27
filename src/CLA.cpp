@@ -1,6 +1,8 @@
 #include "CLA.h"
 
 #include <algorithm> // std::min
+#include <sstream>   // std::stringstream
+#include <iomanip>   // std:;left, std::setw
 
 #include <assert.h>
 #define Assert(x) assert(x)
@@ -324,7 +326,7 @@ namespace CLA
     return m_parameters.size();
   }
 
-  const std::string & Parser::GetParam(size_t paramIndex) const
+  const std::string &Parser::GetParam(size_t paramIndex) const
   {
     Assert(paramIndex < m_parameters.size());
     return m_parameters[paramIndex];
@@ -335,6 +337,8 @@ namespace CLA
     std::vector<std::string> flagNames;
     std::vector<std::string> flagDescriptions;
     std::vector<std::string> argumentStrings;
+
+    size_t longestName = 0;
 
     // Initial command line
     for(auto &i : m_argumentDescriptions)
@@ -355,6 +359,8 @@ namespace CLA
       {
         flagName += (", " + m_switchChars.substr(0, 1)) + m_switchChars.substr(0, 1);
         flagName += i.m_longName;
+
+        argString += ("|" + m_switchChars.substr(0, 1)) + m_switchChars.substr(0, 1) + i.m_longName;
       }
 
 
@@ -379,20 +385,27 @@ namespace CLA
       flagDescriptions.push_back(i.m_description);
       flagNames.push_back(flagName);
       argumentStrings.push_back(argString);
+
+      size_t flagLength = flagName.length();
+      if(flagLength > longestName)
+        longestName = flagLength;
     }
 
-    m_usageString = "Usage: " + m_applicationName;
+    std::stringstream usageStream;
+    usageStream << "Usage: " + m_applicationName;
     for(auto &i : argumentStrings)
-      m_usageString += i + " ";
+      usageStream << i + " ";
 
-    m_usageString += "\n";
+    usageStream << std::endl;
     for(unsigned i = 0; i < flagNames.size(); ++i)
     {
-      m_usageString += flagNames[i] + "\t\t" + flagDescriptions[i] + "\n";
+      usageStream << std::left << std::setw(longestName) << flagNames[i] << "\t" << flagDescriptions[i] << std::endl;
     }
+
+    m_usageString = usageStream.str();
   }
 
-  const std::string & Parser::GetUsageString() const
+  const std::string &Parser::GetUsageString() const
   {
     return m_usageString;
   }
