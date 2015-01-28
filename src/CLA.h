@@ -6,6 +6,7 @@
 
 namespace CLA
 {
+  // Types of arguments
   enum class EntryType
   {
     Switch,
@@ -16,6 +17,7 @@ namespace CLA
     None
   };
 
+  // Types of values for options and parameters
   enum class ValueType
   {
     Int,
@@ -41,6 +43,7 @@ namespace CLA
     };
   }
 
+  // Describes an argument to look for
   struct ArgumentDescription
   {
     EntryType     m_entryType;
@@ -91,6 +94,7 @@ namespace CLA
     const std::string &GetUsageString() const;
 
   private:
+    // Generates usage based off of given values
     void generateUsageString();
 
     // Arguments stored by their option
