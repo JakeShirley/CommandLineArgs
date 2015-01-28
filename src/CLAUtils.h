@@ -8,8 +8,8 @@ namespace CLA
   std::string ToLower(const std::string &str);
 
   // Finds all instances of "find" and replaces it with "replaceWith"
-  void ReplaceCharacters(std::string& str, char find, char replaceWith);
+  void ReplaceCharacters(std::string &str, char find, char replaceWith);
 
   // Extracts the filename and extension out of a path
-  std::string ExtractFilename(const std::string& path);
+  std::string ExtractFilename(const std::string &path);
 }

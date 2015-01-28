@@ -9,20 +9,20 @@
 
 namespace CLA
 {
-  void ReplaceCharacters(std::string& str, char find, char replaceWith)
+  void ReplaceCharacters(std::string &str, char find, char replaceWith)
   {
-    for(unsigned i = 0; i < str.length(); ++i)
+    for(size_t i = 0; i < str.length(); ++i)
       if(str[i] == find)
         str[i] = replaceWith;
   }
 
-  std::string ExtractFilename(const std::string& path)
+  std::string ExtractFilename(const std::string &path)
   {
     std::string result = path;
 
     ReplaceCharacters(result, '/', '\\');
 
-    unsigned filenameStart = result.find_last_of('\\');
+    size_t filenameStart = result.find_last_of('\\');
 
     filenameStart = (filenameStart == std::string::npos) ? 0 : filenameStart + 1;
 
