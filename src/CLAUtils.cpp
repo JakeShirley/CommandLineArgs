@@ -3,7 +3,6 @@
 // STL
 #include <string>     // std::string
 #include <algorithm>  // std::transform
-#include <vector>     // std::vector
 #include <sstream>    // std::stringstream
 #include <functional> // stdd::not1, std::ptr_fun
 #include <cctype>     // std::isspace
