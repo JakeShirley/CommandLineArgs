@@ -281,7 +281,7 @@ namespace CLA
     if(valueItr == m_argumentValues.end())
       return false;
 
-    destination = std::atoi(valueItr->second.c_str());
+    destination = static_cast<unsigned>(std::atoi(valueItr->second.c_str()));
     return true;
   }
 
@@ -291,7 +291,7 @@ namespace CLA
     if(valueItr == m_argumentValues.end())
       return false;
 
-    destination = std::atoi(valueItr->second.c_str());
+    destination = static_cast<char>(std::atoi(valueItr->second.c_str()));
     return true;
   }
 
@@ -301,7 +301,7 @@ namespace CLA
     if(valueItr == m_argumentValues.end())
       return false;
 
-    destination = std::atoi(valueItr->second.c_str());
+    destination = static_cast<unsigned char>(std::atoi(valueItr->second.c_str()));
     return true;
   }
 
@@ -312,7 +312,7 @@ namespace CLA
 
   void Parser::SetSwitchChars(char c)
   {
-    m_switchChars = std::string(" ");
+    m_switchChars.resize(1);
     m_switchChars[0] = c;
   }
 
