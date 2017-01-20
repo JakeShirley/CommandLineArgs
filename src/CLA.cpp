@@ -91,7 +91,7 @@ namespace CLA
       bool hasLongSwitch = false;
       for(auto &i : m_switchChars)
       {
-        int switchPos = currentArg.find(i);
+        size_t switchPos = currentArg.find(i);
         if(switchPos == 0)
         {
           hasSwitch = true;
