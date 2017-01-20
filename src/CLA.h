@@ -77,15 +77,15 @@ namespace CLA
     void SetSwitchChars(const std::string &switchChars);
     void SetSwitchChars(char c);
 
-    bool FoundSwitch(const std::string &argument) const;
-    bool Found(const std::string &argument, std::string   &value) const;
-    bool Found(const std::string &argument, bool          &value) const;
-    bool Found(const std::string &argument, int           &value) const;
-    bool Found(const std::string &argument, unsigned      &value) const;
-    bool Found(const std::string &argument, float         &value) const;
-    bool Found(const std::string &argument, double        &value) const;
-    bool Found(const std::string &argument, char          &value) const;
-    bool Found(const std::string &argument, unsigned char &value) const;
+    bool FindSwitch(const std::string &argument) const;
+    bool Find(const std::string &argument, std::string   &value) const;
+    bool Find(const std::string &argument, bool          &value) const;
+    bool Find(const std::string &argument, int           &value) const;
+    bool Find(const std::string &argument, unsigned      &value) const;
+    bool Find(const std::string &argument, float         &value) const;
+    bool Find(const std::string &argument, double        &value) const;
+    bool Find(const std::string &argument, char          &value) const;
+    bool Find(const std::string &argument, unsigned char &value) const;
 
     size_t GetParamCount() const;
     const std::string &GetParam(size_t paramIndex) const;

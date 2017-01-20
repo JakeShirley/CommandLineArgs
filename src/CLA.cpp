@@ -204,7 +204,7 @@ namespace CLA
         switch(i.m_entryType)
         {
         case EntryType::Switch:
-          if(!(FoundSwitch(i.m_longName) || FoundSwitch(i.m_shortName))) // Short and long not found
+          if(!(FindSwitch(i.m_longName) || FindSwitch(i.m_shortName))) // Short and long not found
           {
             m_error = "Missing required switch '" + i.m_shortName + "'";
             return ParseResult::Invalid;
@@ -229,7 +229,7 @@ namespace CLA
     return ParseResult::Valid;
   }
 
-  bool Parser::Found(const std::string &argument, std::string &destination) const
+  bool Parser::Find(const std::string &argument, std::string &destination) const
   {
     auto valueItr = m_argumentValues.find(argument);
     if(valueItr == m_argumentValues.end())
@@ -239,7 +239,7 @@ namespace CLA
     return true;
   }
 
-  bool Parser::Found(const std::string &argument, bool &destination) const
+  bool Parser::Find(const std::string &argument, bool &destination) const
   {
     auto valueItr = m_argumentValues.find(argument);
     if(valueItr == m_argumentValues.end())
@@ -257,7 +257,7 @@ namespace CLA
     return true;
   }
 
-  bool Parser::Found(const std::string &argument, int &destination) const
+  bool Parser::Find(const std::string &argument, int &destination) const
   {
     auto valueItr = m_argumentValues.find(argument);
     if(valueItr == m_argumentValues.end())
@@ -267,7 +267,7 @@ namespace CLA
     return true;
   }
 
-  bool Parser::Found(const std::string &argument, float &destination) const
+  bool Parser::Find(const std::string &argument, float &destination) const
   {
     auto valueItr = m_argumentValues.find(argument);
     if(valueItr == m_argumentValues.end())
@@ -277,7 +277,7 @@ namespace CLA
     return true;
   }
 
-  bool Parser::Found(const std::string &argument, double &destination) const
+  bool Parser::Find(const std::string &argument, double &destination) const
   {
     auto valueItr = m_argumentValues.find(argument);
     if(valueItr == m_argumentValues.end())
@@ -287,7 +287,7 @@ namespace CLA
     return true;
   }
 
-  bool Parser::Found(const std::string &argument, unsigned &destination) const
+  bool Parser::Find(const std::string &argument, unsigned &destination) const
   {
     auto valueItr = m_argumentValues.find(argument);
     if(valueItr == m_argumentValues.end())
@@ -297,7 +297,7 @@ namespace CLA
     return true;
   }
 
-  bool Parser::Found(const std::string &argument, char &destination) const
+  bool Parser::Find(const std::string &argument, char &destination) const
   {
     auto valueItr = m_argumentValues.find(argument);
     if(valueItr == m_argumentValues.end())
@@ -307,7 +307,7 @@ namespace CLA
     return true;
   }
 
-  bool Parser::Found(const std::string &argument, unsigned char &destination) const
+  bool Parser::Find(const std::string &argument, unsigned char &destination) const
   {
     auto valueItr = m_argumentValues.find(argument);
     if(valueItr == m_argumentValues.end())
@@ -328,7 +328,7 @@ namespace CLA
     m_switchChars[0] = c;
   }
 
-  bool Parser::FoundSwitch(const std::string &argument) const
+  bool Parser::FindSwitch(const std::string &argument) const
   {
     return std::find(m_switches.begin(), m_switches.end(), argument) != m_switches.end();
   }
