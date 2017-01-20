@@ -8,11 +8,13 @@ namespace CLA {
 	typedef std::wstring String;
 	typedef wchar_t Character;
 	typedef std::wstringstream StringStream;
+#define CLA_FORMAT_STRING_SPECIFIER "%ls"
 #define CLA_STRING(x) L ##x
 #else
 	typedef std::string String;
 	typedef char Character;
 	typedef std::stringstream StringStream;
+#define CLA_FORMAT_STRING_SPECIFIER "%s"
 #define CLA_STRING(x) x
 #endif
 

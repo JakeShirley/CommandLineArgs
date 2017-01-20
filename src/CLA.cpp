@@ -178,7 +178,7 @@ namespace CLA {
 				switch (i.mEntryType) {
 					case EntryType::Switch:
 						// Short and long not find
-						error_if(!(findSwitch(i.mLongName) || findSwitch(i.mShortName)), Result::ErrorMissingArg, "Missing required switch '%ls'", i.mShortName.c_str());
+						error_if(!(findSwitch(i.mLongName) || findSwitch(i.mShortName)), Result::ErrorMissingArg, "Missing required switch '" CLA_FORMAT_STRING_SPECIFIER "'", i.mShortName.c_str());
 						break;
 					default:
 					{
@@ -186,7 +186,7 @@ namespace CLA {
 						auto longItr = mArgumentValues.find(i.mLongName);
 
 						// Short and long not find
-						error_if((longItr == mArgumentValues.end()) && (shortItr == mArgumentValues.end()), Result::ErrorMissingArg, "Missing required option '%ls'", i.mShortName.c_str());
+						error_if((longItr == mArgumentValues.end()) && (shortItr == mArgumentValues.end()), Result::ErrorMissingArg, "Missing required option '" CLA_FORMAT_STRING_SPECIFIER "'", i.mShortName.c_str());
 					}
 					break;
 				}
