@@ -1,41 +1,86 @@
 #include "CLAUtils.h"
 
 // STL
-#include <string>     // std::string
 #include <algorithm>  // std::transform
-#include <sstream>    // std::stringstream
 #include <functional> // stdd::not1, std::ptr_fun
 #include <cctype>     // std::isspace
+#include <locale>     // std::wstring_convert
+#include <codecvt>    // std::codecvt_utf8
+#include <cstdio>     // std::vsnprintf
+#include <cstdarg>    // va_start, va_end
 
-namespace CLA
-{
-  void ReplaceCharacters(std::string &str, char find, char replaceWith)
-  {
-    for(size_t i = 0; i < str.length(); ++i)
-      if(str[i] == find)
-        str[i] = replaceWith;
-  }
+namespace CLA {
+	void ReplaceCharacters(String &str, Character find, Character replaceWith) {
+		for (size_t i = 0; i < str.length(); ++i)
+			if (str[i] == find)
+				str[i] = replaceWith;
+	}
 
-  std::string ExtractFilename(const std::string &path)
-  {
-    std::string result = path;
+	String ExtractFilename(const std::wstring &path) {
+		String result = ToCLAString(path);
 
-    ReplaceCharacters(result, '/', '\\');
+		ReplaceCharacters(result, '/', '\\');
 
-    size_t filenameStart = result.find_last_of('\\');
+		size_t filenameStart = result.find_last_of('\\');
+		filenameStart = (filenameStart == String::npos) ? 0 : filenameStart + 1;
+		result.erase(0, filenameStart);
 
-    filenameStart = (filenameStart == std::string::npos) ? 0 : filenameStart + 1;
+		return result;
+	}
 
-    result.erase(0, filenameStart);
+	String ExtractFilename(const std::string &path) {
+		return ExtractFilename(StringToWideString(path));
+	}
 
-    return result;
-  }
+	String ToCLAString(const std::wstring &path) {
+#ifdef CLA_UNICODE
+		return path;
+#else
+		return WideStringToString(path);
+#endif
+	}
 
-  std::string ToLower(const std::string &str)
-  {
-    std::string retValue(str);
-    std::transform(retValue.begin(), retValue.end(), retValue.begin(), ::tolower);
-    return retValue;
-  }
+	String ToCLAString(const std::string &path) {
+#ifdef CLA_UNICODE
+		return StringToWideString(path);
+#else
+		return path;
+#endif
+	}
+
+	std::wstring StringToWideString(const std::string &inputStr) {
+		typedef std::codecvt_utf8<wchar_t> convert_typeX;
+		std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+		return converterX.from_bytes(inputStr);
+	}
+
+	std::string WideStringToString(const std::wstring &inputStr) {
+		typedef std::codecvt_utf8<wchar_t> convert_typeX;
+		std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+		return converterX.to_bytes(inputStr);
+	}
+
+	CLA::String FormatString(const char *format, ...) {
+		CLA::String returnValue;
+
+		va_list args;
+		va_start(args, format);
+
+		char strBuffer[1024];
+		std::vsnprintf(strBuffer, sizeof(strBuffer), format, args);
+
+		va_end(args);
+
+		returnValue = ToCLAString(strBuffer);
+		return std::move(returnValue);
+	}
+
+	String ToLower(const String &str) {
+		String retValue(str);
+		std::transform(retValue.begin(), retValue.end(), retValue.begin(), ::tolower);
+		return retValue;
+	}
 
 }
