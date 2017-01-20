@@ -54,6 +54,7 @@ namespace CLA
     int           m_entryFlags;
 
     ArgumentDescription(EntryType entryType, const char *shortName, const char *longName, const char *description, ValueType valueType, int entryFlags);
+	ArgumentDescription(EntryType entryType, const std::string& shortName, const std::string& longName, const std::string& description, ValueType valueType, int entryFlags);
   };
 
   enum class ParseResult : int

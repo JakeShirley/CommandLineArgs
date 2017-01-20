@@ -45,6 +45,18 @@ namespace CLA
 
   }
 
+
+  ArgumentDescription::ArgumentDescription(EntryType entryType, const std::string& shortName, const std::string& longName, const std::string& description, ValueType valueType, int entryFlags)
+	  : m_entryType(entryType),
+		  m_shortName(shortName),
+		  m_longName(longName),
+		  m_description(description),
+		  m_valueType(valueType),
+		  m_entryFlags(entryFlags)
+	  {
+
+	  }
+
   Parser::Parser(std::vector<ArgumentDescription> arguments)
     : m_argumentDescriptions(arguments),
       m_switchChars("-/")
