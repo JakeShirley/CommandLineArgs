@@ -4,7 +4,7 @@
 #include <algorithm>  // std::transform
 #include <functional> // stdd::not1, std::ptr_fun
 #include <cctype>     // std::isspace
-#include <locale>     // std::wstring_convert
+#include <locale>     // std::wstring_convert, std::tolower
 #include <codecvt>    // std::codecvt_utf8
 #include <cstdio>     // std::vsnprintf
 #include <cstdarg>    // va_start, va_end
@@ -79,7 +79,9 @@ namespace CLA {
 
 	String ToLower(const String &str) {
 		String retValue(str);
-		std::transform(retValue.begin(), retValue.end(), retValue.begin(), ::tolower);
+		std::transform(retValue.begin(), retValue.end(), retValue.begin(), [](char c) {
+			return std::tolower(c, std::locale());
+		});
 		return retValue;
 	}
 
