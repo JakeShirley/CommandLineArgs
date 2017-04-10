@@ -44,14 +44,12 @@ namespace CLA {
 	Parser::Parser(std::vector<ArgumentDescription> arguments)
 		: mArgumentDescriptions(arguments)
 		, mSwitchChars(CLA_STRING("-/")) {
-		_generateUsageString();
 	}
 
 	Parser::Parser(ArgumentDescription *arguments, size_t argumentCount) {
 		for (unsigned i = 0; i < argumentCount; ++i)
 			mArgumentDescriptions.push_back(arguments[i]);
 
-		_generateUsageString();
 	}
 
 	Parser::~Parser() {
@@ -197,22 +195,24 @@ namespace CLA {
 	}
 
 	bool Parser::find(const CLA::String &argument, CLA::String &destination) const {
-		auto valueItr = mArgumentValues.find(argument);
-		if (valueItr == mArgumentValues.end())
+		auto valueStr = _getArgumentValue(argument);
+		if (valueStr == nullptr) {
 			return false;
+		}
 
-		destination = valueItr->second;
+		destination = *valueStr;
 		return true;
 	}
 
 	bool Parser::find(const CLA::String &argument, bool &destination) const {
-		auto valueItr = mArgumentValues.find(argument);
-		if (valueItr == mArgumentValues.end())
+		auto valueStr = _getArgumentValue(argument);
+		if (valueStr == nullptr) {
 			return false;
+		}
 
 
 		// Parse bool value from string
-		CLA::String lowerValue(CLA::ToLower(valueItr->second));
+		CLA::String lowerValue(CLA::ToLower(*valueStr));
 
 		if (lowerValue == CLA_STRING("true"))
 			destination = true;
@@ -223,56 +223,62 @@ namespace CLA {
 	}
 
 	bool Parser::find(const CLA::String &argument, int &destination) const {
-		auto valueItr = mArgumentValues.find(argument);
-		if (valueItr == mArgumentValues.end())
+		auto valueStr = _getArgumentValue(argument);
+		if (valueStr == nullptr) {
 			return false;
+		}
 
-		destination = std::stoi(valueItr->second.c_str());
+		destination = std::stoi(valueStr->c_str());
 		return true;
 	}
 
 	bool Parser::find(const CLA::String &argument, float &destination) const {
-		auto valueItr = mArgumentValues.find(argument);
-		if (valueItr == mArgumentValues.end())
+		auto valueStr = _getArgumentValue(argument);
+		if (valueStr == nullptr) {
 			return false;
+		}
 
-		destination = static_cast<float>(std::stof(valueItr->second.c_str()));
+		destination = static_cast<float>(std::stof(valueStr->c_str()));
 		return true;
 	}
 
 	bool Parser::find(const CLA::String &argument, double &destination) const {
-		auto valueItr = mArgumentValues.find(argument);
-		if (valueItr == mArgumentValues.end())
+		auto valueStr = _getArgumentValue(argument);
+		if (valueStr == nullptr) {
 			return false;
+		}
 
-		destination = std::stof(valueItr->second.c_str());
+		destination = std::stof(valueStr->c_str());
 		return true;
 	}
 
 	bool Parser::find(const CLA::String &argument, unsigned &destination) const {
-		auto valueItr = mArgumentValues.find(argument);
-		if (valueItr == mArgumentValues.end())
+		auto valueStr = _getArgumentValue(argument);
+		if (valueStr == nullptr) {
 			return false;
+		}
 
-		destination = static_cast<unsigned>(std::stoi(valueItr->second.c_str()));
+		destination = static_cast<unsigned>(std::stoi(valueStr->c_str()));
 		return true;
 	}
 
 	bool Parser::find(const CLA::String &argument, char &destination) const {
-		auto valueItr = mArgumentValues.find(argument);
-		if (valueItr == mArgumentValues.end())
+		auto valueStr = _getArgumentValue(argument);
+		if (valueStr == nullptr) {
 			return false;
+		}
 
-		destination = static_cast<char>(std::stoi(valueItr->second.c_str()));
+		destination = static_cast<char>(std::stoi(valueStr->c_str()));
 		return true;
 	}
 
 	bool Parser::find(const CLA::String &argument, unsigned char &destination) const {
-		auto valueItr = mArgumentValues.find(argument);
-		if (valueItr == mArgumentValues.end())
+		auto valueStr = _getArgumentValue(argument);
+		if (valueStr == nullptr) {
 			return false;
+		}
 
-		destination = static_cast<unsigned char>(std::stoi(valueItr->second.c_str()));
+		destination = static_cast<unsigned char>(std::stoi(valueStr->c_str()));
 		return true;
 	}
 
@@ -286,7 +292,7 @@ namespace CLA {
 	}
 
 	bool Parser::findSwitch(const CLA::String &argument) const {
-		return std::find(mSwitches.begin(), mSwitches.end(), argument) != mSwitches.end();
+		return (std::find(mSwitches.begin(), mSwitches.end(), _getLongArgName(argument)) != mSwitches.end()) || (std::find(mSwitches.begin(), mSwitches.end(), _getShortArgName(argument)) != mSwitches.end());
 	}
 
 	size_t Parser::getParamCount() const {
@@ -297,6 +303,37 @@ namespace CLA {
 		error_if(paramIndex >= mParameters.size(), Result::ErrorArgCount, "Invalid param. index");
 		destination = mParameters[paramIndex];
 		return CLA::Result::OK;
+	}
+	
+	const CLA::String* Parser::_getArgumentValue(const CLA::String& argName) const {
+		auto valueItr = mArgumentValues.find(_getLongArgName(argName));
+		if (valueItr == mArgumentValues.end()) {
+			valueItr = mArgumentValues.find(_getShortArgName(argName));
+			if (valueItr == mArgumentValues.end())
+				return nullptr;
+		}
+
+		return &valueItr->second;
+	}
+
+	CLA::String Parser::_getLongArgName(const CLA::String& argName) const {
+		for (auto&& arg : mArgumentDescriptions) {
+			if ((arg.mLongName == argName) || (arg.mShortName == argName)) {
+				return arg.mLongName;
+			}
+		}
+
+		return CLA::String();
+	}
+
+	CLA::String Parser::_getShortArgName(const CLA::String& argName) const {
+		for (auto&& arg : mArgumentDescriptions) {
+			if ((arg.mLongName == argName) || (arg.mShortName == argName)) {
+				return arg.mShortName;
+			}
+		}
+
+		return CLA::String();
 	}
 
 	void Parser::_generateUsageString() {
@@ -369,7 +406,10 @@ namespace CLA {
 		mUsageString = output;
 	}
 
-	const CLA::String &Parser::getUsageString() const {
+	const CLA::String &Parser::getUsageString() {
+		if (mUsageString.empty()) {
+			_generateUsageString();
+		}
 		return mUsageString;
 	}
 

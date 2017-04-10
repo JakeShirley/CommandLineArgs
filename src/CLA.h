@@ -102,9 +102,13 @@ namespace CLA
     size_t getParamCount() const;
     CLA::Result getParam(size_t paramIndex, CLA::String &destination) const;
     const CLA::String &getError() const { return mError; };
-    const CLA::String &getUsageString() const;
+    const CLA::String &getUsageString();
 
   private:
+    const CLA::String* _getArgumentValue(const CLA::String& argName) const;
+    CLA::String _getLongArgName(const CLA::String& argName) const;
+    CLA::String _getShortArgName(const CLA::String& argName) const;
+
     // Generates usage based off of given values
     void _generateUsageString();
 
