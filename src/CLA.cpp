@@ -170,6 +170,7 @@ namespace CLA {
 		}
 
 		// Check for all mandatory flags
+		size_t paramCount = 0;
 		for (auto &i : mArgumentDescriptions) {
 			if (i.mEntryFlags & EntryFlags::Manditory) // Only check mandatory options
 			{
@@ -178,6 +179,12 @@ namespace CLA {
 						// Short and long not find
 						error_if(!(findSwitch(i.mLongName) || findSwitch(i.mShortName)), Result::ErrorMissingArg, "Missing required switch '" CLA_FORMAT_STRING_SPECIFIER "'", i.mShortName.c_str());
 						break;
+					case EntryType::Parameter:
+					{
+						paramCount++;
+						error_if(paramCount > mParameters.size(), Result::ErrorTooManyParams, "Too many parameters given");
+						break;
+					}
 					default:
 					{
 						auto shortItr = mArgumentValues.find(i.mShortName);

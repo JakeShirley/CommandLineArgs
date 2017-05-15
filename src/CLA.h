@@ -73,6 +73,7 @@ namespace CLA
     ErrorNullArgument,
     ErrorArgCount,
     ErrorMissingArg,
+    ErrorTooManyParams,
 
     None
   };
