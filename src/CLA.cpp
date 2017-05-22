@@ -383,6 +383,8 @@ namespace CLA {
 					break;
 				case EntryType::UsageText:
 					break;
+				default:
+					break;
 			}
 
 			// Epilogue
