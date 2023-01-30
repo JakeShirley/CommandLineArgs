@@ -49,17 +49,15 @@ namespace CLA {
 	}
 
 	std::wstring StringToWideString(const std::string &inputStr) {
-		typedef std::codecvt_utf8<wchar_t> convert_typeX;
-		std::wstring_convert<convert_typeX, wchar_t> converterX;
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
-		return converterX.from_bytes(inputStr);
+		return converter.from_bytes(inputStr);
 	}
 
 	std::string WideStringToString(const std::wstring &inputStr) {
-		typedef std::codecvt_utf8<wchar_t> convert_typeX;
-		std::wstring_convert<convert_typeX, wchar_t> converterX;
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
-		return converterX.to_bytes(inputStr);
+		return converter.to_bytes(inputStr);
 	}
 
 	CLA::String FormatString(const char *format, ...) {
